@@ -28,11 +28,11 @@ public extension SpotlightViewDelegate {
 
 open class SpotlightView: UIView {
     public static let defaultAnimateDuration: TimeInterval = 0.25
-
+    public var blurView: UIVisualEffectView?
+    
     private lazy var maskLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.fillRule = .evenOdd
-        layer.fillColor = UIColor.black.cgColor
         return layer
     }()
     
@@ -51,6 +51,18 @@ open class SpotlightView: UIView {
     
     private func commonInit() {
         layer.mask = maskLayer
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        self.insertSubview(blurView, at: 0)
+        NSLayoutConstraint.activate([
+          blurView.topAnchor.constraint(equalTo: self.topAnchor),
+          blurView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+          blurView.heightAnchor.constraint(equalTo: self.heightAnchor),
+          blurView.widthAnchor.constraint(equalTo: self.widthAnchor)
+        ])
+        blurView.alpha = 0.7
+        self.blurView = blurView
     }
     
     open override func layoutSubviews() {
